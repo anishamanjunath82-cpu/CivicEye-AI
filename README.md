@@ -1,104 +1,104 @@
-# `<Project Name>` — `<one-line tagline>`
+# CivicEye AI — Clean Mysuru Through Intelligent Civic Monitoring
 
 > HackMysuru 1.0 · Phase 1 · Civic Governance & Clean Mysuru
-> Team `<Team Name>` (`<Team ID>`)
 
-| 📎 Submission links | 📋 Templates | 🏗️ Architecture | 🛡️ Hard constraints | ⚙️ Setup | 🤖 AI usage | ⚠️ Limitations |
-|---|---|---|---|---|---|---|
-| [resource.md](./resource.md) | [resource-templates/](./resource-templates/) | [docs/architecture.md](./docs/architecture.md) | [docs/constraints.md](./docs/constraints.md) | [docs/setup.md](./docs/setup.md) | [ai.md](./ai.md) | [docs/limitations.md](./docs/limitations.md) |
+**Team:** `<JESHTA>`  
+**Team ID:** `<HM26-6551>`
 
-<!--
-This README is the overview. Detailed content lives in the linked files so each stays short.
-Keep the section ORDER below. Reviewers look for each section in the same place in every repo.
--->
+CivicEye AI is an AI-powered civic monitoring platform designed to help identify, analyze, prioritize and manage waste-related civic issues in Mysuru.
 
 ---
 
 ## 1. Problem Understanding
 
-<!-- Which sub-problem did you pick and WHY that one? 5–8 sentences. -->
+### Chosen sub-problem: Civic Waste Monitoring & Response
 
-**Chosen sub-problem:** `<e.g. Routing>`
+Waste and cleanliness issues can be difficult to identify, classify and prioritize quickly. Reports may contain incomplete information, while field teams need useful information to understand the type and urgency of an issue.
 
-- **The gap we saw:** `<What actually goes wrong today, in Mysuru terms>`
-- **Why it matters:** `<Consequence: delay, bounced complaints, lost trust, health risk>`
-- **Why we chose this over the others:** `<Your reasoning>`
-- **What "solved" looks like for us:** `<A measurable outcome, e.g. "a citizen never has to pick an office">`
+CivicEye AI addresses this gap by using AI-assisted analysis to process visual information and convert it into structured civic insights. The platform can help identify waste-related problems, assess their urgency and present the information through a centralized interface.
 
-## 2. Target Users & Mysuru Context
+The goal is to make civic issue reporting and response more organized, data-driven and easier to monitor.
 
-| User | Their situation | What they need from us |
-|---|---|---|
-| `<Resident in a ward at the MCC–panchayat edge>` | `<No idea which office owns the drain; patchy 4G>` | `<Report once, see who owns it, see status>` |
-| `<Panchayat / MCC officer>` | `<...>` | `<...>` |
-| `<Sanitation / field worker>` | `<Basic Android phone, low data>` | `<...>` |
+**What "solved" looks like:**
 
-**Local context we designed for:** `<jurisdiction overlap, connectivity, Kannada/English, device types, literacy>`
-
-## 3. Solution Overview
-
-<!-- Plain language. A non-engineer should follow this. -->
-
-`<2–4 sentence summary>`
-
-**Core flow:**
-1. `<Citizen does X>`
-2. `<System does Y>`
-3. `<Staff does Z>`
-4. `<Citizen sees outcome>`
-
-**Screenshots:** `<2–4 images under docs/images/, each < 1 MB>`
-
-## 4. Architecture
-
-`<One-sentence summary, e.g. "Offline-first PWA → REST API → PostgreSQL/PostGIS, with a rules-based routing service.">`
-
-➡️ Diagram, components, data model and APIs: **[docs/architecture.md](./docs/architecture.md)**
-
-## 5. Tech Stack & AI Usage
-
-**Stack:** `<React PWA · FastAPI · PostgreSQL + PostGIS · Render>` (full rationale in [docs/architecture.md](./docs/architecture.md#tech-stack))
-
-**AI tools used in development:** `<ChatGPT, Copilot, ...>`
-**AI inside the product:** `<e.g. YOLOv8 for bin detection / none>`
-
-➡️ Full disclosure: **[ai.md](./ai.md)**
-
-## 6. Decision Log (Summary)
-
-<!-- The full 1-page Decision Log is a PDF on Google Drive, linked in resource.md. ≤ 3 lines here. -->
-
-- **Chose:** `<approach>`, **over:** `<rejected alternative>`
-- **Because:** `<the trade-off in one line>`
-- **First thing to break at city scale:** `<one line>`
-
-➡️ Full decision log: **[resource.md](./resource.md#4-submission-artifacts-google-drive)** · Template: **[decision-log-template.md](./resource-templates/decision-log-template.md)**
-
-## 7. Setup & Run
-
-```bash
-git clone <repo-url> && cd <repo>
-<one-line install> && <one-line run>
-```
-
-➡️ Prerequisites, environment variables, seed data and offline testing: **[docs/setup.md](./docs/setup.md)**
-
-## 8. Known Limitations
-
-- `<Top limitation 1>`
-- `<Top limitation 2>`
-- `<Top limitation 3>`
-
-➡️ Full list, edge cases and scaling roadmap: **[docs/limitations.md](./docs/limitations.md)**
+A civic issue can be submitted, analyzed, categorized and presented with useful information that helps the responsible team understand what needs attention.
 
 ---
 
-## Team
+## 2. Target Users & Mysuru Context
 
-| Name | Role | GitHub |
+| User | Situation | What CivicEye AI provides |
 |---|---|---|
-| `<...>` | `<...>` | `@<...>` |
+| Citizen / Resident | Wants to report a waste or cleanliness issue | Simple visual issue submission and analysis |
+| Civic / Municipal Staff | Needs to understand reported issues | Structured issue information and prioritization |
+| Field Worker | Needs actionable information | Issue details and location-related information |
+| Civic Administrators | Need an overview of civic conditions | Dashboard, analytics and issue insights |
 
-## License
+### Local context
 
-`<MIT / Apache-2.0 / None>`. You retain full ownership of your code.
+CivicEye AI is designed with Mysuru's civic cleanliness and waste-management requirements in mind. The platform is designed to support visual reporting, location-aware information and AI-assisted prioritization.
+
+---
+
+## 3. Solution Overview
+
+CivicEye AI combines a web interface, backend services and AI-assisted analysis to transform visual civic reports into actionable information.
+
+### Core flow
+
+1. A user submits an image or civic issue information.
+2. CivicEye AI processes the submitted information.
+3. AI-assisted services analyze and categorize the issue.
+4. The system generates useful issue information and urgency-related insights.
+5. Results are presented through the dashboard and related interfaces.
+6. Civic teams can use the information to understand and prioritize issues.
+
+---
+
+## 4. Key Features
+
+- AI-assisted civic waste analysis
+- Image enhancement and processing
+- Waste / issue detection
+- Issue urgency assessment
+- Geographic clustering and location-related analysis
+- Analytics dashboard
+- Civic chatbot
+- Weather-aware civic information
+- Route optimization support
+- Interactive web interface
+- Report and result visualization
+- Responsive frontend interface
+
+---
+
+## 5. Architecture
+
+CivicEye AI uses a web frontend connected to a Node.js backend and modular service components.
+
+### High-level architecture
+
+```text
+User
+  │
+  ▼
+CivicEye AI Web Interface
+  │
+  ▼
+Node.js / Express Server
+  │
+  ├── Image Enhancement
+  ├── Issue Detection
+  ├── AI / Gemini Integration
+  ├── Urgency Analysis
+  ├── Geographic Clustering
+  ├── Analytics
+  ├── Weather Service
+  ├── Route Optimization
+  └── Civic Chatbot
+  │
+  ▼
+Structured Civic Insights
+  │
+  ▼
+Dashboard / Reports / User Interface
