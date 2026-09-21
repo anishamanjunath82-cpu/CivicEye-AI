@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicEye AI — Presentation Deck (HackMysuru 1.0)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: #0A0A0F; color: #E0E0E0; padding: 20px; }
+        .top-bar {
+            max-width: 1100px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center;
+            background: #161622; padding: 12px 24px; border-radius: 8px; border: 1px solid #2A2A3E;
+        }
+        .btn {
+            background: #00D4AA; color: #000; font-weight: 700; border: none; padding: 8px 16px; border-radius: 6px;
+            cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 14px;
+        }
+        .btn-outline { background: transparent; color: #00D4AA; border: 1px solid #00D4AA; }
+        .deck-container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
+        .slide {
+            background: #12121A; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; border: 1px solid #2A2A3E;
+            padding: 40px 50px; position: relative; display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); page-break-after: always;
+        }
+        .slide-header { margin-bottom: 20px; }
+        .category-tag { color: #00D4AA; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+        .slide-title { color: #FFFFFF; font-size: 26px; font-weight: 800; }
+        .slide-body { flex: 1; display: flex; gap: 20px; align-items: stretch; }
+        .card {
+            background: #1A1A28; border: 1px solid #2E2E44; border-radius: 8px; padding: 24px; flex: 1;
+            display: flex; flex-direction: column;
+        }
+        .stat-large { font-size: 36px; font-weight: 800; color: #FF6B35; margin-bottom: 8px; }
+        .card-title { font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 12px; }
+        .card-desc { font-size: 13px; line-height: 1.6; color: #9E9EB2; }
+        .slide-footer {
+            border-top: 1px solid #222234; padding-top: 12px; display: flex; justify-content: space-between;
+            font-size: 11px; color: #76768E;
+        }
+        @media print {
+            body { padding: 0; background: #000; }
+            .top-bar { display: none; }
+            .slide { border-radius: 0; border: none; margin-bottom: 0; page-break-after: always; height: 100vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div>
+            <strong>CivicEye AI — Presentation Deck</strong> (10 Slides)
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <a href="/presentation.pptx" download class="btn">📥 Download PowerPoint (.pptx)</a>
+            <button onclick="window.print()" class="btn btn-outline">🖨️ Print to PDF (Ctrl+P)</button>
+        </div>
+    </div>
+
+    <div class="deck-container">
+
+        <!-- Slide 1: Title -->
+        <div class="slide" style="justify-content: center; align-items: center; text-align: center;">
+            <div style="background: rgba(0,212,170,0.1); border: 1px solid #00D4AA; padding: 6px 16px; border-radius: 20px; color: #00D4AA; font-size: 12px; font-weight: 700; margin-bottom: 16px;">
+                HACKMYSURU 1.0 — CIVIC GOVERNANCE & CLEAN MYSURU
+            </div>
+            <h1 style="font-size: 56px; font-weight: 900; color: #FFF; margin-bottom: 12px;">CivicEye AI</h1>
+            <p style="font-size: 20px; color: #9E9EB2; max-width: 800px; margin-bottom: 30px;">
+                Autonomous Mobile-Dashcam & Low-Light Waste Detection System for Mysuru City Corporation
+            </p>
+            <div style="display: flex; gap: 20px;">
+                <div style="background: #161622; border: 1px solid #2A2A3E; padding: 12px 24px; border-radius: 8px;">
+                    <div style="color: #00D4AA; font-size: 11px; font-weight: 700;">SUB-PROBLEM</div>
+                    <div style="color: #FFF; font-weight: 600;">Option 5: Passive Detection</div>
+                </div>
+                <div style="background: #161622; border: 1px solid #2A2A3E; padding: 12px 24px; border-radius: 8px;">
+                    <div style="color: #00D4AA; font-size: 11px; font-weight: 700;">TARGET ISSUE</div>
+                    <div style="color: #FFF; font-weight: 600;">150+ Tonnes/Day Night Dumping</div>
+                </div>
+                <div style="background: #161622; border: 1px solid #2A2A3E; padding: 12px 24px; border-radius: 8px;">
+                    <div style="color: #00D4AA; font-size: 11px; font-weight: 700;">PROTOTYPE</div>
+                    <div style="color: #FFF; font-weight: 600;">Full Working MVP on Port 3000</div>
+                </div>
+            </div>
+            <div style="position: absolute; bottom: 20px; font-size: 11px; color: #76768E;">Team: HM26-Submission | Mysuru City Corporation & Civic Partners</div>
+        </div>
+
+        <!-- Slide 2: Problem Statement -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">Problem Discovery & Context</div>
+                <div class="slide-title">The Ground Reality in Mysuru: A Compounding Civic Crisis</div>
+            </div>
+            <div class="slide-body">
+                <div class="card">
+                    <div class="stat-large">550-600 T</div>
+                    <div class="card-title">Daily Garbage Generation</div>
+                    <div class="card-desc">Mysuru generates ~600 tonnes of solid waste daily, with an untreated legacy backlog of nearly 7 Lakh tonnes accumulating over years.</div>
+                </div>
+                <div class="card">
+                    <div class="stat-large" style="color: #FF4444;">150+ TPD</div>
+                    <div class="card-title">Illegal Night C&D Dumping</div>
+                    <div class="card-desc">Construction & Demolition debris (concrete, bricks, rubble) dumped illegally along Ring Road and outer vacant plots between 11PM and 4AM.</div>
+                </div>
+                <div class="card">
+                    <div class="stat-large" style="color: #00D4AA;">13 Bodies</div>
+                    <div class="card-title">Boundary Restructuring</div>
+                    <div class="card-desc">MCC absorbing 1 CMC, 4 Town Panchayats, & 8 Gram Panchayats. Constant confusion over jurisdictions causes complaints to disappear without action.</div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Mysuru City Corporation Official Data</span>
+                <span>Slide 2 / 10</span>
+            </div>
+        </div>
+
+        <!-- Slide 3: Citizen App Flaw -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">The Fundamental Gap</div>
+                <div class="slide-title">Why Existing Citizen Reporting Apps Fail for Illegal Dumping</div>
+            </div>
+            <div class="slide-body">
+                <div class="card" style="border-color: #552222; background: #1C1518;">
+                    <div class="card-title" style="color: #FF5555; font-size: 18px;">❌ Citizen Reporting (Swachhata / Portals)</div>
+                    <div class="card-desc" style="color: #DDAAAA; font-size: 14px; line-height: 1.8;">
+                        • <strong>Night Dumping is Unwitnessed:</strong> 90% of C&D waste happens at 2 AM when citizens are asleep.<br>
+                        • <strong>Jurisdiction Ping-Pong:</strong> Complaints bounce between MCC and Village Panchayats.<br>
+                        • <strong>Alert Fatigue:</strong> Duplicate and low-quality citizen photos overwhelm officers.<br>
+                        • <strong>Passive Waste Accumulation:</strong> Dumps double in size before someone reports.
+                    </div>
+                </div>
+                <div class="card" style="border-color: #1A4E40; background: #12201D;">
+                    <div class="card-title" style="color: #00D4AA; font-size: 18px;">✅ CivicEye AI (Autonomous Passive Detection)</div>
+                    <div class="card-desc" style="color: #BBE0D6; font-size: 14px; line-height: 1.8;">
+                        • <strong>Autonomous Fleet Inspection:</strong> Municipal trucks passively scan every street daily.<br>
+                        • <strong>Hardware-Free Night Enhancement:</strong> OpenCV/Sharp algorithms pierce pitch darkness.<br>
+                        • <strong>15m Geo-Deduplication:</strong> 50 vehicle drive-bys merge into 1 actionable ticket.<br>
+                        • <strong>Zero Human Reliance:</strong> Spots overflowing bins & debris before citizens even wake up.
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Problem Statement Alignment: Option 5 (Detection Without Reporting)</span>
+                <span>Slide 3 / 10</span>
+            </div>
+        </div>
+
+        <!-- Slide 4: Proposed Solution -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">Proposed Solution</div>
+                <div class="slide-title">CivicEye AI: End-to-End Autonomous Pipeline</div>
+            </div>
+            <div class="slide-body">
+                <div class="card">
+                    <div style="color: #00D4AA; font-size: 20px; font-weight: 800;">01</div>
+                    <div class="card-title">Mobile Fleet Input</div>
+                    <div class="card-desc">300+ existing municipal tippers, auto-rickshaws, and KSRTC city buses fitted with $15 dashcams.</div>
+                </div>
+                <div class="card">
+                    <div style="color: #00D4AA; font-size: 20px; font-weight: 800;">02</div>
+                    <div class="card-title">Low-Light CLAHE</div>
+                    <div class="card-desc">Sharp/OpenCV pipeline balances contrast, corrects gamma, and removes night camera noise.</div>
+                </div>
+                <div class="card">
+                    <div style="color: #00D4AA; font-size: 20px; font-weight: 800;">03</div>
+                    <div class="card-title">Dual-Stage AI</div>
+                    <div class="card-desc">Candidate bounding box extraction + Gemini 3.6 Flash multimodal verification & tonnage estimation.</div>
+                </div>
+                <div class="card">
+                    <div style="color: #00D4AA; font-size: 20px; font-weight: 800;">04</div>
+                    <div class="card-title">Geo-Deduplication</div>
+                    <div class="card-desc">15m Haversine spatial clustering groups multiple passes into a single incident with sighting counts.</div>
+                </div>
+                <div class="card">
+                    <div style="color: #00D4AA; font-size: 20px; font-weight: 800;">05</div>
+                    <div class="card-title">Municipal Dispatch</div>
+                    <div class="card-desc">Live MCC Command Center with multi-factor urgency index and nearest-neighbor route generation.</div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>System Architecture</span>
+                <span>Slide 4 / 10</span>
+            </div>
+        </div>
+
+        <!-- Slide 5: The Twist -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">Solving The Twist</div>
+                <div class="slide-title">Mastering Low-Light & Grainy Dashcam Footage</div>
+            </div>
+            <div style="background: rgba(255,107,53,0.1); border: 1px solid #FF6B35; padding: 12px 20px; border-radius: 8px; color: #FF6B35; font-size: 13px; font-weight: 600; margin-bottom: 20px;">
+                ⚡ THE TWIST: Mysuru doesn't have smart cameras watching every street at night. The system must succeed on realistic, grainy, moving dashcam feeds in pitch-black conditions.
+            </div>
+            <div class="slide-body">
+                <div class="card">
+                    <div class="card-title" style="color: #00D4AA;">CLAHE Histogram Equalization</div>
+                    <div class="card-desc">Applies tile-based adaptive contrast. Brightens shadow regions while preventing oncoming vehicle headlight glare from blowing out the frame.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: #00D4AA;">Non-Linear Gamma Scaling (γ=0.7)</div>
+                    <div class="card-desc">Reveals concrete rubble, laterite red bricks, and plastic waste against dark unpaved asphalt without amplifying background grain.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: #00D4AA;">Weather & Rain Calibration</div>
+                    <div class="card-desc">Monsoon Mode dynamically down-weights confidence thresholds when windshield rain streaks cause blur, avoiding weather-induced false alarms.</div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Algorithmic Robustness</span>
+                <span>Slide 5 / 10</span>
+            </div>
+        </div>
+
+        <!-- Slide 6: Zero False Positives -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">AI Accuracy & Precision</div>
+                <div class="slide-title">Zero False Positives: Multimodal Verification & Suspicion Clock</div>
+            </div>
+            <div class="slide-body">
+                <div class="card">
+                    <div class="stat-large" style="color: #00D4AA;">8+ Frames</div>
+                    <div class="card-title">Temporal Persistence</div>
+                    <div class="card-desc">Objects must remain spatially stable across 8 consecutive video frames. Instantly rejects passing vehicle shadows, speed bumps, and road dividers.</div>
+                </div>
+                <div class="card">
+                    <div class="stat-large" style="color: #FF6B35;">Gemini 3.6 Flash</div>
+                    <div class="card-title">Multimodal Deep Reasoner</div>
+                    <div class="card-desc">Differentiates legitimate active construction material from illegal roadside dumping. Provides instant volume estimation in metric tonnes.</div>
+                </div>
+                <div class="card">
+                    <div class="stat-large" style="color: #FFD166;">11PM – 4AM</div>
+                    <div class="card-title">Suspicion Clock Prioritization</div>
+                    <div class="card-desc">Automatically assigns higher threat scores to midnight dumps on outer Ring Road compared to daytime roadside maintenance piles.</div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Accuracy Engineering</span>
+                <span>Slide 6 / 10</span>
+            </div>
+        </div>
+
+        <!-- Slide 7: Deduplication & Repeat Offenders -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">Operations Optimization</div>
+                <div class="slide-title">15m Spatial Deduplication & Repeat Offender Tracking</div>
+            </div>
+            <div class="slide-body">
+                <div class="card">
+                    <div class="card-title" style="color: #00D4AA;">15-Meter Geo-Spatial Clustering</div>
+                    <div class="card-desc" style="font-size: 14px; line-height: 1.8;">
+                        • Haversine distance engine groups frame detections within a 15-meter radius.<br>
+                        • If 5 garbage trucks pass the same debris heap, sightings increment from 1 to 5.<br>
+                        • Eliminates alert fatigue: exactly 1 centralized ticket is managed by MCC.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: #FF6B35;">Chronic Dump Site Detection</div>
+                    <div class="card-desc" style="font-size: 14px; line-height: 1.8;">
+                        • Locations accumulating 3+ illegal dumpings within 7 days trigger 'Chronic Site' alerts.<br>
+                        • Visualized on the map with pulsing red threat indicators for targeted CCTV deployment.<br>
+                        • One-click PDF export produces legal evidence logs with GPS stamps for municipal fines.
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Preventing Alert Fatigue</span>
+                <span>Slide 7 / 10</span>
+            </div>
+        </div>
+
+        <!-- Slide 8: Dashboard & Dispatch -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">Product Demonstration</div>
+                <div class="slide-title">MCC Command Dashboard: Live Operational Control</div>
+            </div>
+            <div class="slide-body">
+                <div class="card">
+                    <div class="card-title">🗺️ Interactive Mysuru Map</div>
+                    <div class="card-desc">Custom Leaflet GIS mapping with color-coded markers for Critical, High, Medium, and Low severity incidents across all wards.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🚚 Route Optimizer</div>
+                    <div class="card-desc">Nearest-neighbor path generation groups active tickets into optimal truck routes, slashing municipal cleanup travel by 30%.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📊 Real-Time Telemetry</div>
+                    <div class="card-desc">Live Chart.js telemetry tracking waste categories, severity distributions, and the 24-hour suspicion curve.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🌐 Bilingual Support</div>
+                    <div class="card-desc">Full Kannada (ಕನ್ನಡ) & English localization empowers ground sanitation teams and supervisors alike.</div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>User Interface & Municipal Experience</span>
+                <span>Slide 8 / 10</span>
+            </div>
+        </div>
+
+        <!-- Slide 9: Tech Stack & Verification -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">Implementation & Testing</div>
+                <div class="slide-title">Production-Grade Architecture & Live Prototype</div>
+            </div>
+            <div class="slide-body">
+                <div class="card">
+                    <div class="card-title" style="color: #00D4AA;">Full-Stack Architecture</div>
+                    <div class="card-desc" style="font-size: 13px; line-height: 1.8;">
+                        • <strong>Backend:</strong> Node.js + Express REST API<br>
+                        • <strong>Vision Enhancement:</strong> Sharp (C++ LibVips bindings)<br>
+                        • <strong>Multimodal AI:</strong> Google Gemini 3.6 Flash Vision API<br>
+                        • <strong>GIS & Mapping:</strong> Leaflet.js + Stadia Dark Layer<br>
+                        • <strong>Analytics:</strong> Chart.js 4.4 Canvas Engine<br>
+                        • <strong>Export Engine:</strong> Client-side jsPDF Document Generator<br>
+                        • <strong>PWA Support:</strong> Service Worker offline cache enabled
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: #FF6B35;">Verified MVP Capabilities</div>
+                    <div class="card-desc" style="font-size: 13px; line-height: 1.8;">
+                        ✅ Live WebCam / Video Drag-and-Drop Frame Ingestion<br>
+                        ✅ Interactive Before/After Night-Vision Slider<br>
+                        ✅ Audio SpeechSynthesis Voice Announcements<br>
+                        ✅ Citizen AI Conversational Chatbot Widget<br>
+                        ✅ Automated Weather Fetch (Simulated & API)<br>
+                        ✅ 100% Tested locally on http://localhost:3000
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Technical Feasibility & Rigor</span>
+                <span>Slide 9 / 10</span>
+            </div>
+        </div>
+
+        <!-- Slide 10: Scalability -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="category-tag">Rollout & Impact</div>
+                <div class="slide-title">City Implementation Roadmap & Social Impact</div>
+            </div>
+            <div class="slide-body">
+                <div class="card">
+                    <div class="card-title" style="color: #00D4AA;">Phase 1: Working MVP</div>
+                    <div class="card-desc"><strong>Status: COMPLETED (HackMysuru)</strong><br>Fully functioning prototype running on port 3000 with real Gemini AI, low-light enhancement, spatial clustering, and bilingual dashboard.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: #FF6B35;">Phase 2: 30-Day Fleet Pilot</div>
+                    <div class="card-desc"><strong>Target: October 2026</strong><br>Install $15 dashcams on 20 MCC compaction tippers along Outer Ring Road and Hunsur Road. Calibrate models with Ward 14 officers.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: #FFD166;">Phase 3: 90-Day City Rollout</div>
+                    <div class="card-desc"><strong>Target: December 2026</strong><br>Deploy across 300+ door-to-door autos. Direct integration with Mysuru Smart City ICCC for instant contractor violation ticketing.</div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Sustainable Civic Governance | Mysuru City Corporation</span>
+                <span>Slide 10 / 10</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

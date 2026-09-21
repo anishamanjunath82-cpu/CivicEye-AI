@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicEye AI - Autonomous Waste Detection for Mysuru</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <!-- Leaflet JS — must load BEFORE inline map script in body -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="logo-container">
+            <h1 data-i18n="appTitle">📸 CivicEye AI</h1>
+            <p class="subtitle" data-i18n="appSubtitle">Autonomous Waste Detection for Mysuru</p>
+        </div>
+        <div class="header-actions">
+            <button id="btn-open-whatsapp" class="lang-btn" style="color: #25D366; border-color: #25D366; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">💬 WhatsApp Reward QR</button>
+            <a href="/presentation.html" target="_blank" class="lang-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:4px;">📊 Slides (10 Pgs)</a>
+            <a href="/presentation.pptx" download class="lang-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:4px; color:#00D4AA; border-color:#00D4AA;">📥 PPTX</a>
+            <button id="lang-toggle" class="lang-btn">EN | ಕನ್ನಡ</button>
+            <span class="weather-badge" id="weather-badge" data-i18n="weatherLoading">--°C</span>
+            <span class="live-status"><span class="pulse-dot"></span> <span data-i18n="liveSystemActive">Live System Active</span></span>
+        </div>
+    </header>
+
+    <!-- Stats Row -->
+    <section class="stats-container">
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-details">
+                <div class="stat-value" id="stat-total">0</div>
+                <div class="stat-label" data-i18n="totalIncidents">Total Incidents</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon alert-icon">🚨</div>
+            <div class="stat-details">
+                <div class="stat-value" id="stat-active">0</div>
+                <div class="stat-label" data-i18n="activeAlerts">Active Alerts</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-details">
+                <div class="stat-value" id="stat-resolved">0</div>
+                <div class="stat-label" data-i18n="resolvedIncidents">Resolved</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-details">
+                <div class="stat-value" id="stat-urgency">0</div>
+                <div class="stat-label" data-i18n="avgUrgencyScore">Avg Urgency Score</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Left Column (60%) -->
+        <section class="left-column">
+            <div class="card input-section">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="upload-tab" data-i18n="uploadVideoImage">Upload Video/Image</button>
+                    <button class="tab-btn" data-tab="camera-tab" data-i18n="liveCamera">Live Camera</button>
+                </div>
+                
+                <!-- Upload Mode -->
+                <div id="upload-tab" class="tab-content active">
+                    <div class="dropzone" id="dropzone">
+                        <p data-i18n="dragDropText">Drag & Drop video/image files here</p>
+                        <p class="muted-text" data-i18n="clickToBrowse">or click to browse</p>
+                        <input type="file" id="file-input" accept="image/*,video/*" hidden>
+                    </div>
+                </div>
+
+                <!-- Camera Mode -->
+                <div id="camera-tab" class="tab-content" style="display: none;">
+                    <div class="camera-container" style="position: relative;">
+                        <video id="webcam-video" autoplay playsinline muted></video>
+                        <canvas id="video-overlay"></canvas>
+                        <button id="capture-btn" class="primary-btn" data-i18n="captureAnalyze">📸 Capture & Analyze</button>
+                    </div>
+                </div>
+                
+                <!-- Loading Overlay -->
+                <div id="loading-overlay" class="loading-overlay" style="display: none;">
+                    <div class="spinner"></div>
+                    <p data-i18n="analyzingFrame">Analyzing Frame...</p>
+                </div>
+            </div>
+
+            <!-- Comparison Section -->
+            <div class="card comparison-section">
+                <h3 data-i18n="visualAnalysis">Visual Analysis</h3>
+                <div class="comparison-grid">
+                    <div class="image-box">
+                        <h4 data-i18n="originalFrame">Original Frame</h4>
+                        <img id="img-original" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23222'%3E%3Crect width='100' height='100'/%3E%3C/svg%3E" alt="Original">
+                    </div>
+                    <div class="image-box">
+                        <h4 data-i18n="enhancedNightVision">Enhanced (Night Vision)</h4>
+                        <img id="img-enhanced" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23222'%3E%3Crect width='100' height='100'/%3E%3C/svg%3E" alt="Enhanced">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Before/After Slider Container -->
+            <div class="card comparison-slider-card">
+                <h3 data-i18n="beforeAfterSlider">Before/After Image Comparison</h3>
+                <div id="slider-container">
+                    <div class="slider-image-before">
+                        <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' fill='%23222'%3E%3Crect width='400' height='200'/%3E%3C/svg%3E" alt="Before">
+                        <div class="slider-label left" data-i18n="beforeLabel">Before</div>
+                    </div>
+                    <div class="slider-image-after">
+                        <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' fill='%23333'%3E%3Crect width='400' height='200'/%3E%3C/svg%3E" alt="After">
+                        <div class="slider-label right" data-i18n="afterLabel">After</div>
+                    </div>
+                    <div class="slider-divider"></div>
+                </div>
+            </div>
+
+            <!-- Detection Result -->
+            <div class="card detection-result" id="detection-result">
+                <h3 data-i18n="detectionResults">Detection Results</h3>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="label" data-i18n="typeLabel">Type:</span>
+                        <span class="value" id="result-type" data-i18n="waitingValue">Waiting...</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label" data-i18n="confidenceLabel">Confidence:</span>
+                        <span class="value" id="result-confidence">0%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label" data-i18n="volumeLabel">Volume:</span>
+                        <span class="value" id="result-volume">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label" data-i18n="severityLabel">Severity:</span>
+                        <span class="badge" id="result-severity">NONE</span>
+                    </div>
+                </div>
+                <div class="result-details">
+                    <p><strong data-i18n="descriptionLabel">Description:</strong> <span id="result-description">-</span></p>
+                    <p><strong data-i18n="actionLabel">Action:</strong> <span id="result-action">-</span></p>
+                </div>
+            </div>
+
+            <!-- Action buttons row -->
+            <div class="action-buttons-row">
+                <button class="action-btn" id="btn-voice-alert" data-i18n="voiceAlert">🔊 Voice Alert</button>
+                <button class="action-btn" id="btn-generate-pdf" data-i18n="generatePdf">📄 Generate PDF Report</button>
+                <button class="action-btn" id="btn-cleanup-route" data-i18n="cleanupRoute">🗺️ Show Cleanup Route</button>
+                <button class="action-btn" id="btn-whatsapp-bounty" style="border-color: #25D366; color: #25D366; font-weight: 600;">🎁 WhatsApp Citizen Reward</button>
+            </div>
+        </section>
+
+        <!-- Right Column (40%) -->
+        <section class="right-column">
+            <div class="card map-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                    <h3 style="margin:0;" data-i18n="liveIncidentMap">Live Incident Map — Mysuru</h3>
+                    <button id="btn-toggle-clean-zones" class="lang-btn" style="color:#00FF88; border-color:#00FF88; font-weight:700; font-size:12px;">🌿 Hide Clean Zones</button>
+                </div>
+                <div id="map" style="width:100%; height:380px; border-radius:8px; border:1px solid #1e1e2e; display:block; background:#111;"></div>
+                <div class="map-legend" style="flex-wrap:wrap; gap:8px;">
+                    <span class="legend-item"><span style="width:12px;height:12px;border-radius:50%;background:#FF3333;display:inline-block;"></span> CRITICAL</span>
+                    <span class="legend-item"><span style="width:12px;height:12px;border-radius:50%;background:#FF6B35;display:inline-block;"></span> HIGH</span>
+                    <span class="legend-item"><span style="width:12px;height:12px;border-radius:50%;background:#FFCC00;display:inline-block;"></span> MEDIUM</span>
+                    <span class="legend-item"><span style="width:12px;height:12px;border-radius:50%;background:#00D4AA;display:inline-block;"></span> LOW</span>
+                    <span class="legend-item"><span style="width:12px;height:12px;border-radius:50%;background:#00FF88;display:inline-block;border:1px solid #fff;"></span> CLEAN ZONE</span>
+                </div>
+
+                <!-- Clean Zone Leaderboard -->
+                <div style="margin-top:1rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span style="font-size:13px; font-weight:700; color:#00FF88;">🏆 Cleanest Wards (Top 5)</span>
+                        <span style="font-size:10px; color:#666;">Swachh Survekshan 2023</span>
+                    </div>
+                    <div id="clean-zone-panel" style="display:flex; flex-direction:column;">
+                        <div style="color:#666; font-size:12px; text-align:center; padding:12px;">Loading clean zones...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Repeat Offenders -->
+            <div class="card repeat-offenders-card" style="margin-top: 1.5rem;">
+                <h3 data-i18n="repeatOffenders">Repeat Offenders</h3>
+                <div class="offenders-content" style="display: flex; align-items: center; justify-content: space-between;">
+                    <span data-i18n="chronicDumpSites">Chronic Dump Sites:</span>
+                    <span class="offender-badge" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="pulse-dot" style="background-color: var(--severity-critical);"></span> 
+                        <span id="chronic-count" style="font-weight: bold; font-size: 1.2rem; color: var(--severity-critical);">3</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- WhatsApp Citizen Reward QR Card (Permanently Visible) -->
+            <div class="card whatsapp-reward-card" style="margin-top: 1.5rem; border: 1px solid #25D366; background: linear-gradient(180deg, #161622 0%, #101F18 100%);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h3 style="margin: 0; color: #25D366; font-size: 1.05rem; border: none; padding: 0;">📱 WhatsApp Citizen Bounty</h3>
+                    <span style="background: rgba(37,211,102,0.15); border: 1px solid #25D366; color: #25D366; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">₹200 REWARD</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #A0A0B8; margin-bottom: 1rem; line-height: 1.4;">
+                    Scan with your phone camera or WhatsApp to report illegal night dumping directly to MCC & claim UPI cash rewards.
+                </p>
+                <div style="display: flex; flex-direction: column; align-items: center; background: #FFFFFF; padding: 12px; border-radius: 10px; width: fit-content; margin: 0 auto 1rem auto; box-shadow: 0 0 20px rgba(37,211,102,0.25);">
+                    <img src="data:image/png;base64,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" alt="Scan to Report via WhatsApp" style="width: 170px; height: 170px; display: block;">
+                    <span style="font-size: 10px; font-weight: 800; color: #111; margin-top: 6px; letter-spacing: 0.5px;">SCAN TO REPORT & GET REWARD</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <a href="https://wa.me/918212418800?text=MCC%20CITIZEN%20VIGILANCE%20REPORT:%20I%20am%20reporting%20illegal%20dumping%20in%20Mysuru.%20Please%20verify%20and%20credit%20my%20Citizen%20Reward%20Points." target="_blank" class="action-btn" style="flex: 1; text-decoration: none; background: #25D366; color: #000; font-weight: 700; border: none; justify-content: center; font-size: 0.8rem;">
+                        💬 Open WhatsApp
+                    </a>
+                    <a href="/images/whatsapp_reward_qr.png" download="Mysuru_WhatsApp_Reward_QR.png" class="action-btn" style="padding: 0 12px; text-decoration: none; justify-content: center; font-size: 0.8rem;">
+                        📥 Save QR
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Analytics Dashboard -->
+    <section class="analytics-dashboard" style="padding: 0 2rem 1.5rem 2rem;">
+        <div class="card analytics-card">
+            <h3 data-i18n="analyticsDashboard">Analytics Dashboard</h3>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h4 data-i18n="wasteTypeDist">Waste Type Distribution</h4>
+                    <canvas id="chart-type"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h4 data-i18n="severityBreakdown">Severity Breakdown</h4>
+                    <canvas id="chart-severity"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h4 data-i18n="suspicionClock">Suspicion Clock</h4>
+                    <canvas id="chart-hourly"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom Section: Incident Feed -->
+    <section class="incident-feed">
+        <div class="card">
+            <h3 data-i18n="recentIncidentsFeed">Recent Incidents Feed</h3>
+            <div class="table-responsive">
+                <table id="incident-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="timeCol">Time</th>
+                            <th data-i18n="locationCol">Location</th>
+                            <th data-i18n="typeCol">Type</th>
+                            <th data-i18n="severityCol">Severity</th>
+                            <th data-i18n="volumeCol">Volume</th>
+                            <th data-i18n="urgencyScoreCol">Urgency Score</th>
+                            <th data-i18n="statusCol">Status</th>
+                            <th data-i18n="sightingsCol">Sightings</th>
+                        </tr>
+                    </thead>
+                    <tbody id="incident-tbody">
+                        <!-- Rows injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p data-i18n="footerText">Built for HackMysuru 1.0 — Phase 1</p>
+    </footer>
+
+    <!-- WhatsApp Citizen Vigilance & Reward Modal -->
+    <div id="whatsapp-modal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" id="btn-close-whatsapp">✕</button>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span class="reward-pill">🎁 MCC CITIZEN REWARD PROGRAM</span>
+                <span style="font-size: 11px; color: #25D366; font-weight: 600;">Verified Bounties</span>
+            </div>
+            <h2 style="font-size: 1.25rem; color: #FFF; font-weight: 700;">Report Illegal Night Dumping Directly</h2>
+            <p style="font-size: 0.85rem; color: #9E9EB2;">
+                Scan with your phone camera or WhatsApp to open a direct complaint thread with the <strong>Mysuru City Corporation Control Room</strong>. Verified reports receive cash rewards & Swachh credits.
+            </p>
+
+            <div class="qr-box">
+                <img id="qr-img" src="data:image/png;base64,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" alt="WhatsApp Report QR" style="width: 180px; height: 180px; display: block;">
+                <div style="font-size: 11px; color: #111; font-weight: 700; margin-top: 8px; letter-spacing: 0.5px;">
+                    SCAN WITH WHATSAPP CAMERA
+                </div>
+            </div>
+
+            <div class="reward-steps">
+                <div>💰 <strong>Reward Policy:</strong> Earn <strong>₹200 Cash Bounty</strong> or <strong>500 Swachh Mysuru Points</strong> for verified C&D debris dumping reports on Ring Road/vacant plots.</div>
+                <div style="margin-top: 6px;">📍 <strong>How to report:</strong> 1. Scan QR ➔ 2. Share live GPS location ➔ 3. Send photo/video of vehicle or debris ➔ 4. Receive UPI reward credit after verification.</div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <a id="btn-whatsapp-direct" href="https://wa.me/918212418800?text=MCC%20CITIZEN%20VIGILANCE%20REPORT:%20I%20am%20reporting%20illegal%20dumping%20in%20Mysuru.%20Please%20verify%20and%20credit%20my%20Citizen%20Reward%20Points." target="_blank" class="primary-btn" style="flex: 1; text-align: center; text-decoration: none; background: #25D366; color: #000; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    💬 Open in WhatsApp Directly
+                </a>
+                <a href="/images/whatsapp_reward_qr.png" download="Mysuru_CleanWatch_WhatsApp_QR.png" class="action-btn" style="min-width: unset; padding: 0 14px; text-decoration: none; display: flex; align-items: center;">
+                    📥 Save QR
+                </a>
+            </div>
+
+            <div style="border-top: 1px solid #222234; padding-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+                <label style="font-size: 0.75rem; color: #76768E;">Custom WhatsApp Group or Number (Optional):</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="custom-wa-input" placeholder="e.g. https://chat.whatsapp.com/... or 919876543210" style="flex: 1; background: rgba(255,255,255,0.04); border: 1px solid #2A2A3E; color: #FFF; padding: 6px 10px; border-radius: 6px; font-size: 0.8rem;">
+                    <button id="btn-update-qr" class="lang-btn" style="color: #00D4AA; border-color: #00D4AA;">Update QR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Standalone Map Init — runs after Leaflet loads, no module dependency -->
+    <script>
+    window.addEventListener('load', function() {
+        // Ensure #map exists and has height
+        var mapEl = document.getElementById('map');
+        if (!mapEl) return;
+        mapEl.style.height = '400px';
+        mapEl.style.width = '100%';
+
+        // Init Leaflet map on Mysuru
+        var mysoruMap = L.map('map', { zoomControl: true }).setView([12.2958, 76.6394], 12);
+        window._civiceyeMap = mysoruMap;
+
+        // CartoDB DarkMatter — FREE, no API key
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            subdomains: 'abcd',
+            attribution: '&copy; OpenStreetMap &copy; CARTO'
+        }).addTo(mysoruMap);
+
+        // ── Mysuru Clean Zones (Swachh Survekshan 2023) ──────────────
+        var cleanZones = [
+            { name:"Kuvempunagar",      lat:12.3141, lng:76.6552, score:94, badge:"🏆 #1 Cleanest",   desc:"Top-ranked ward. Daily sweeping, zero open dumping." },
+            { name:"Saraswathipuram",   lat:12.3101, lng:76.6221, score:91, badge:"⭐ Platinum",       desc:"Segregation compliance 90%+, excellent door-to-door." },
+            { name:"Jayalakshmipuram",  lat:12.3188, lng:76.6368, score:89, badge:"⭐ Gold Zone",      desc:"Model residential zone, active RWA–MCC coordination." },
+            { name:"Gokulam",           lat:12.3254, lng:76.6142, score:88, badge:"⭐ Gold Zone",      desc:"High citizen participation, clean market areas." },
+            { name:"Vijayanagar",       lat:12.3043, lng:76.6018, score:85, badge:"🥈 Silver Zone",   desc:"Active ward committee, regular cleanliness drives." },
+            { name:"Brindavan Extn",    lat:12.3355, lng:76.6264, score:83, badge:"🥈 Silver Zone",   desc:"Well-maintained parks & road medians, low littering." },
+            { name:"Chamundi Hills",    lat:12.2718, lng:76.6719, score:82, badge:"🥈 Silver Zone",   desc:"Tourism-priority zone, enhanced sweeping near temple." },
+            { name:"Lakshmipuram",      lat:12.3067, lng:76.6524, score:80, badge:"🥈 Silver Zone",   desc:"Heritage residential with consistent waste collection." },
+            { name:"Bogadi",            lat:12.2740, lng:76.6001, score:72, badge:"🥉 Bronze Zone",   desc:"Growing area with improving collection infrastructure." },
+            { name:"Hebbal Industrial", lat:12.3558, lng:76.6213, score:58, badge:"⚠️ Needs Attn",   desc:"Industrial fringe — moderate waste control, improving." }
+        ];
+
+        // ── Illegal Dumping Hotspots ──────────────────────────────────
+        var hotspots = [
+            { lat:12.2440, lng:76.6115, name:"Ring Road South",        sev:"CRITICAL", col:"#FF3333" },
+            { lat:12.3720, lng:76.6480, name:"Hootagalli Industrial",   sev:"HIGH",     col:"#FF6B35" },
+            { lat:12.2611, lng:76.6870, name:"Bannimantap Yard",        sev:"HIGH",     col:"#FF6B35" },
+            { lat:12.3012, lng:76.5912, name:"Mysuru-Hunsur Road Edge", sev:"MEDIUM",   col:"#FFCC00" },
+            { lat:12.3489, lng:76.6756, name:"Hebbal Lake Periphery",   sev:"MEDIUM",   col:"#FFCC00" }
+        ];
+
+        // Draw hotspot glow circles
+        hotspots.forEach(function(h) {
+            L.circle([h.lat, h.lng], {
+                radius: 600,
+                fillColor: h.col, fillOpacity: 0.10,
+                color: h.col, weight: 1, opacity: 0.4
+            }).addTo(mysoruMap).bindPopup(
+                '<b style="color:'+h.col+'">⚠ '+h.name+'</b><br>Severity: '+h.sev
+            );
+        });
+
+        // Draw clean zone circles + score markers
+        var cleanLayer = L.layerGroup().addTo(mysoruMap);
+        function drawCleanZones() {
+            cleanLayer.clearLayers();
+            cleanZones.forEach(function(z) {
+                var col = z.score >= 90 ? '#00FF88'
+                        : z.score >= 80 ? '#00D4AA'
+                        : z.score >= 70 ? '#FFCC00' : '#FF6B35';
+
+                // Zone circle
+                L.circle([z.lat, z.lng], {
+                    radius: 400 + z.score * 3,
+                    fillColor: col, fillOpacity: 0.13,
+                    color: col, weight: 2, opacity: 0.7,
+                    dashArray: z.score >= 80 ? null : '5,4'
+                }).addTo(cleanLayer);
+
+                // Score label marker
+                var icon = L.divIcon({
+                    className: '',
+                    html: '<div style="background:'+col+';color:#000;font-weight:900;font-size:12px;'+
+                          'width:38px;height:38px;border-radius:50%;display:flex;align-items:center;'+
+                          'justify-content:center;border:2px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,0.5);'+
+                          'font-family:Arial,sans-serif;">'+z.score+'</div>',
+                    iconSize: [38, 38], iconAnchor: [19, 19]
+                });
+                L.marker([z.lat, z.lng], { icon: icon }).addTo(cleanLayer)
+                 .bindPopup(
+                    '<div style="font-family:Arial;min-width:200px;">'+
+                    '<b style="font-size:14px;">🌿 '+z.name+'</b><br>'+
+                    '<span style="font-size:22px;font-weight:900;color:'+col+'">'+z.score+'/100</span><br>'+
+                    '<span style="background:'+col+'33;border:1px solid '+col+';padding:2px 8px;border-radius:10px;font-size:11px;">'+z.badge+'</span><br><br>'+
+                    '<span style="font-size:12px;color:#555;">'+z.desc+'</span></div>',
+                    { maxWidth: 240 }
+                 );
+            });
+        }
+        drawCleanZones();
+
+        // Toggle button
+        var zonesVisible = true;
+        var toggleBtn = document.getElementById('btn-toggle-clean-zones');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                zonesVisible = !zonesVisible;
+                if (zonesVisible) {
+                    cleanLayer.addTo(mysoruMap);
+                    toggleBtn.innerHTML = '🌿 Hide Clean Zones';
+                    toggleBtn.style.color = '#00FF88';
+                    toggleBtn.style.borderColor = '#00FF88';
+                } else {
+                    mysoruMap.removeLayer(cleanLayer);
+                    toggleBtn.innerHTML = '🌿 Show Clean Zones';
+                    toggleBtn.style.color = '#888';
+                    toggleBtn.style.borderColor = '#888';
+                }
+            });
+        }
+
+        // Force Leaflet to recalc size
+        setTimeout(function() { mysoruMap.invalidateSize(); }, 500);
+
+        // Populate leaderboard panel
+        var panel = document.getElementById('clean-zone-panel');
+        if (panel) {
+            var sorted = cleanZones.slice().sort(function(a,b){ return b.score - a.score; });
+            panel.innerHTML = sorted.slice(0, 5).map(function(z, i) {
+                var col = z.score >= 90 ? '#00FF88' : z.score >= 80 ? '#00D4AA' : z.score >= 70 ? '#FFCC00' : '#FF6B35';
+                var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.';
+                return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">'+
+                    '<span style="font-size:18px;min-width:26px;">'+medal+'</span>'+
+                    '<div style="flex:1"><div style="font-weight:600;font-size:13px;color:#FFF;">'+z.name+'</div>'+
+                    '<div style="font-size:10px;color:#888;">'+z.badge+'</div></div>'+
+                    '<div style="background:'+col+'22;border:1px solid '+col+';color:'+col+';font-weight:800;font-size:13px;padding:3px 10px;border-radius:12px;">'+z.score+'</div></div>';
+            }).join('');
+        }
+
+        // Expose so app.js can add incident markers
+        window._addIncidentToMap = function(incident) {
+            if (!incident.lat || !incident.lng) return;
+            var cols = {CRITICAL:'#FF3333', HIGH:'#FF6B35', MEDIUM:'#FFCC00', LOW:'#00D4AA'};
+            var col = cols[incident.severity] || '#888';
+            L.circleMarker([incident.lat, incident.lng], {
+                radius:9, fillColor:col, color:'#fff', weight:2, opacity:1, fillOpacity:0.9
+            }).addTo(mysoruMap).bindPopup(
+                '<b>⚠ '+incident.type+'</b><br>Severity: <b style="color:'+col+'">'+incident.severity+'</b><br>'+
+                'Volume: '+(incident.volume_estimate_tonnes||'?')+' T<br>Sightings: '+(incident.sightingCount||1)
+            );
+        };
+    });
+    </script>
+
+    <!-- Module App -->
+    <script type="module" src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>

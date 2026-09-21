@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CivicEye AI — WhatsApp Citizen Reward QR</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+  body { background: #0A0A0F; color: #E0E0E0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .flyer {
+    background: linear-gradient(160deg, #161622 0%, #0F1F17 100%);
+    border: 2px solid #25D366;
+    border-radius: 20px;
+    padding: 32px 28px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 0 40px rgba(37,211,102,0.2);
+    text-align: center;
+  }
+  .logo { font-size: 2rem; font-weight: 900; color: #00D4AA; letter-spacing: -1px; margin-bottom: 4px; }
+  .logo span { color: #fff; }
+  .badge {
+    display: inline-block;
+    background: rgba(37,211,102,0.15);
+    border: 1px solid #25D366;
+    color: #25D366;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  h2 { font-size: 1.3rem; color: #FFF; font-weight: 800; margin-bottom: 8px; }
+  p { font-size: 0.85rem; color: #A0A0B8; line-height: 1.5; margin-bottom: 20px; }
+  .qr-wrapper {
+    background: #fff;
+    padding: 16px;
+    border-radius: 14px;
+    display: inline-block;
+    box-shadow: 0 0 30px rgba(37,211,102,0.35);
+    margin-bottom: 20px;
+  }
+  .qr-wrapper img { display: block; width: 200px; height: 200px; }
+  .scan-label { font-size: 11px; font-weight: 800; color: #111; margin-top: 8px; letter-spacing: 0.8px; }
+  .steps {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: left;
+    font-size: 0.8rem;
+    color: #9E9EB2;
+    line-height: 1.8;
+    margin-bottom: 18px;
+  }
+  .steps strong { color: #FFF; }
+  .reward-box {
+    background: rgba(37,211,102,0.08);
+    border: 1px solid #25D366;
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .reward-amount { font-size: 1.6rem; font-weight: 900; color: #25D366; }
+  .reward-label { font-size: 0.75rem; color: #A0A0B8; }
+  .btn-wa {
+    display: block;
+    background: #25D366;
+    color: #000;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    margin-bottom: 10px;
+  }
+  .footer { font-size: 0.72rem; color: #555; margin-top: 16px; }
+  @media print {
+    body { background: #fff; }
+    .flyer { border-color: #25D366; box-shadow: none; }
+    .btn-wa { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="flyer">
+  <div class="logo">📸 CivicEye <span>AI</span></div>
+  <div class="badge">🏛️ MYSURU CITY CORPORATION</div>
+  <h2>Spot Illegal Dumping?<br>Report & Get Rewarded!</h2>
+  <p>Scan this QR code with your WhatsApp camera to send a direct complaint to the MCC Control Room. Verified reports earn you cash rewards instantly via UPI.</p>
+
+  <div class="qr-wrapper">
+    <img src="data:image/png;base64,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" alt="WhatsApp Report QR Code">
+    <div class="scan-label">SCAN WITH WHATSAPP CAMERA</div>
+  </div>
+
+  <div class="reward-box">
+    <div style="text-align:left">
+      <div class="reward-amount">₹200</div>
+      <div class="reward-label">Per Verified Report (UPI Transfer)</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:1.4rem; font-weight:800; color:#00D4AA">500</div>
+      <div class="reward-label">Swachh Mysuru Points</div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div>📲 <strong>Step 1:</strong> Scan QR code above with WhatsApp</div>
+    <div>📍 <strong>Step 2:</strong> Share your live GPS location</div>
+    <div>📸 <strong>Step 3:</strong> Send photo/video of the debris or vehicle</div>
+    <div>💰 <strong>Step 4:</strong> Provide your UPI ID for reward credit</div>
+    <div>✅ <strong>Step 5:</strong> MCC verifies & sends ₹200 within 72 hours</div>
+  </div>
+
+  <a class="btn-wa" href="https://wa.me/918212418800?text=MCC%20CITIZEN%20VIGILANCE%20REPORT%3A%0AReporting%20illegal%20dumping%20in%20Mysuru%20for%20Citizen%20Reward%20Program.%0A%0ALocation%2FLandmark%3A%20%0ATime%20spotted%3A%20%0AWaste%20Type%20(C%26D%20%2F%20Garbage%20%2F%20Bin%20overflow)%3A%20%0APhoto%2FVideo%3A%20%5BAttach%20here%5D%0A%0AUPI%20ID%20for%20reward%20payment%3A%20" target="_blank">💬 Open WhatsApp to Report Now</a>
+
+  <div class="footer">
+    MCC Control Room: +91 82124 18800 &nbsp;|&nbsp; CivicEye AI — Autonomous Waste Detection<br>
+    Built for HackMysuru 1.0 — Phase 1: Civic Governance & Clean Mysuru
+  </div>
+</div>
+</body>
+</html>
